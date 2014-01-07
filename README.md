@@ -12,7 +12,7 @@ I have used Ember App Kit and it is fantastic, but it does a little too much for
 
 ### But Grunt!
 
-I have started to prefer [Gulp.js](http://gulpjs.com/) over Grunt because it performs better and is a lot simpler to use for a simple compile and building pipeline.
+I have started to prefer [Gulp.js](http://gulpjs.com/) over Grunt because of its simplicity and performance.
 
 ## License
 
