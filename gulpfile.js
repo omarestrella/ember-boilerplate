@@ -9,11 +9,16 @@ var es = require('event-stream');
 function transpile () {
     function modifyContents(file, cb) {
         var contents = file.contents;
-        var compiler = new es6.Compiler(String(contents));
-        file.contents = new Buffer(compiler.toGlobals());
+        var name = file.path.split('js/')[1].split('.js')[0]; // Maybe not the best?
 
-        // First argument is an error if one exists
-        // Second argument is the modified file object
+        var options = {
+            moduleName: name,
+            type: 'amd'
+        };
+
+        var compiler = new es6.Compiler(String(contents), name, options);
+        file.contents = new Buffer(compiler.toAMD());
+
         cb(null, file);
     }
 
@@ -34,10 +39,11 @@ function handlebars () {
 }
 
 var thirdPartyJSFiles = [
+    'app/lib/almond/almond.js',
     'app/lib/jquery/jquery.js',
     'app/lib/handlebars/handlebars.js',
     'app/lib/ember/ember.js',
-    'app/lib/ember-data/index.js',
+    'app/lib/ember-data/ember-data.js',
     'app/lib/lodash/dist/lodash.js'
 ];
 
@@ -53,7 +59,7 @@ gulp.task('appScripts', function () {
     gulp.src(appJSFiles)
         .pipe(transpile())
         .pipe(concat('app.js'))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('build/'));
 });
 
@@ -80,8 +86,18 @@ gulp.task('less', function () {
         .pipe(gulp.dest('build/'));
 });
 
+gulp.task('copy', function () {
+    gulp.src('app/index.html')
+        .pipe(gulp.dest('build/'));
+});
+
 gulp.task('default', function () {
+    gulp.run('copy');
     gulp.run('appScripts', 'libScripts', 'templates', 'less');
+
+    gulp.watch('app/index.html', function (event) {
+        gulp.run('copy');
+    });
 
     gulp.watch('app/js/**/*.js', function (event) {
         gulp.run('appScripts');
