@@ -15,7 +15,7 @@ function classFactory (klass) {
 }
 
 function normalizeName (name) {
-    return Ember.String.underscore(name);
+    return Ember.String.underscore(name).replace(/_/g, '/').replace(/\./g, '/');
 }
 
 function resolve (details) {
@@ -24,6 +24,8 @@ function resolve (details) {
     var name = details.fullNameWithoutType;
     var moduleName = name + '/' + details.type;
     var normalizedName = normalizeName(moduleName);
+
+    console.log(normalizedName);
 
     try {
         module = require(normalizedName, null, null, true);
@@ -38,6 +40,10 @@ function resolve (details) {
     } else {}
 
     return module;
+}
+
+function resolveRouter (details) {
+    return require('router');
 }
 
 var Resolver = Ember.DefaultResolver.extend({
@@ -61,7 +67,8 @@ var Resolver = Ember.DefaultResolver.extend({
 
     resolveOther: resolve,
     resolveView: resolve,
-    resolveController: resolve
+    resolveController: resolve,
+    resolveRouter: resolveRouter
 });
 
 export default Resolver;

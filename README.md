@@ -14,6 +14,16 @@ I have used Ember App Kit and it is fantastic, but it does a little too much for
 
 I have started to prefer [Gulp.js](http://gulpjs.com/) over Grunt because of its simplicity and performance.
 
+## Structure Philosophy
+
+There are many opinions that people take when structuring their Ember projects. This library imposes its own.
+
+The idea behind the structure of this project is that each route is considered its own sort of module. For example, the `index` route has the following folder structure:
+
+    -- /js/index
+      -- /controller.js
+      -- /view.js [optional]
+
 ## License
 
 The MIT License (MIT)
