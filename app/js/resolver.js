@@ -25,8 +25,6 @@ function resolve (details) {
     var moduleName = name + '/' + details.type;
     var normalizedName = normalizeName(moduleName);
 
-    console.log(normalizedName);
-
     try {
         module = require(normalizedName, null, null, true);
     } catch (e) {

@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
+var connect = require('connect');
 
 var transpile = require('./plugins/gulp-transpile');
 var handlebars = require('./plugins/gulp-handlebars');
@@ -59,9 +60,14 @@ gulp.task('copy', function () {
         .pipe(gulp.dest('build/'));
 });
 
+gulp.task('connect', function () {
+    connect(connect.static('build')).listen(9000);
+});
+
 gulp.task('default', function () {
     gulp.run('copy');
     gulp.run('appScripts', 'libScripts', 'templates', 'less');
+    gulp.run('connect');
 
     gulp.watch('app/index.html', function (event) {
         gulp.run('copy');
